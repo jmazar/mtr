@@ -18,7 +18,8 @@ public:
     virtual MTR_STATUS GetSymbolNames(std::vector<std::string> & out_symbols) = 0;
     virtual MTR_STATUS GetSymbolAttributes() = 0;
 
-    virtual MTR_STATUS PublishSymbol(std::string & in_symbol_name, std::vector<tm> & in_dates ) = 0;
+    virtual MTR_STATUS PublishSymbol( std::string & in_symbol_name ) = 0;
+    virtual MTR_STATUS PublishSymbolDates( std::string & in_symbol_name, std::vector<tm> & in_dates ) = 0;
     virtual MTR_STATUS PublishSymbolAttribe() = 0;
 };
 
