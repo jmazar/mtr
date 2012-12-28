@@ -1,5 +1,5 @@
-IDIR = $(DIR)/framework/include
-SRC  = $(DIR)/framework/src
+IDIR = include/
+SRC  = src/
 CFLAGS = -I$(IDIR)
 
 all: data_manager.o
