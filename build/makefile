@@ -2,6 +2,7 @@ export CC = g++
 export DIR  = ..
 export ODIR = $(DIR)/build/obj
 export BDIR = $(DIR)/build/bin
+export LIBDIR = $(DIR)/build/lib
 GTESTDIR = $(DIR)/3rdparty/gtest-1.6.0
 
 framework:
@@ -9,7 +10,7 @@ framework:
 
 tests:
 	cd $(GTESTDIR)/make/; $(MAKE) -f Makefile all
-	$(MAKE) -f $(DIR)/framework/makefile tests
+	cd $(DIR)/framework/; $(MAKE) -f makefile tests
 
-clean:
+.PHONY: tests
 
