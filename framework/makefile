@@ -9,7 +9,6 @@ data_manager.o: $(IDIR)/IDataManager.h $(IDIR)/DataManager.h $(SRC)/DataManager.
 	$(CC) -c $(SRC)/DataManager.cpp -o $(ODIR)/data_manager.o $(CFLAGS)
 
 tests:
-	echo $(CURDIR)
 	cd tests; $(MAKE) -f makefile all
 
 .PHONY: tests

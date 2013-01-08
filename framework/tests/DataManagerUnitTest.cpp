@@ -19,12 +19,23 @@ protected:
 
 TEST_F(DataManagerTest, PublishSymbolTest)
 {
-    // EXPECT_EQ(MTR_STATUS_SUCCESS, data_manager_->PublishSymbol("INTC"));
+    SymbolHandle first_handle = 0;
+    EXPECT_EQ(MTR_STATUS_SUCCESS, data_manager_->PublishSymbol("INTC", & first_handle));
+    EXPECT_NE(0, first_handle);
 
-    std::vector<std::string> symbols;
+    SymbolHandle second_handle = 0;
+    EXPECT_EQ(MTR_STATUS_SUCCESS, data_manager_->PublishSymbol("AAPL", & second_handle));
+    EXPECT_NE(0, second_handle);
 
-    // EXPECT_EQ(MTR_STATUS_SUCCESS, data_manager_->GetSymbolNames( symbols );
-    // EXPECT_EQ(1, symbols.size());
+    // Different symbols should have different handles.
+    EXPECT_NE(first_handle, second_handle);
+
+    SymbolHandle third_handle = 0;
+    EXPECT_EQ(MTR_STATUS_SUCCESS, data_manager_->PublishSymbol("INTC", & third_handle));
+    EXPECT_NE(0, third_handle);
+
+    // The same symbol should get the same handle.
+    EXPECT_EQ(first_handle, third_handle);
 }
 
 int main(int argc, char **argv) {

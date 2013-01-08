@@ -8,9 +8,14 @@ GTESTDIR = $(DIR)/3rdparty/gtest-1.6.0
 framework:
 	cd ../framework; $(MAKE) -f $(DIR)/framework/makefile
 
-tests:
+tests: framework
 	cd $(GTESTDIR)/make/; $(MAKE) -f Makefile all
 	cd $(DIR)/framework/; $(MAKE) -f makefile tests
+
+clean:
+	rm -rf $(ODIR)/*
+	rm -rf $(BDIR)/*
+	rm -rf $(LIBDIR)/*
 
 .PHONY: tests
 
