@@ -8,6 +8,8 @@ enum MTR_STATUS
     MTR_STATUS_SUCCESS = 0
 };
 
-typedef uint64_t SymbolHandle;
+typedef uint64_t    Handle;
+typedef Handle      SymbolHandle;
+typedef Handle      SymbolAttributeHandle;
 
 #endif // _MTR_DATA_MODEL_H

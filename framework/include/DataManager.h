@@ -21,13 +21,15 @@ public:
     virtual MTR_STATUS PublishSymbol( std::string const & in_symbol_name, SymbolHandle * out_symbol_handle );
 
     // virtual MTR_STATUS PublishSymbolDates( std::string & in_symbol_name, std::vector<tm> & in_dates );
-    // virtual MTR_STATUS PublishSymbolAttribe();
+    virtual MTR_STATUS PublishSymbolAttribute( std::string const & in_symbol_name, SymbolAttributeHandle * out_symbol_attribute_handle );
 private:
-    SymbolHandle        GenerateHandle();
+    Handle        GenerateHandle();
     typedef std::map<std::string, SymbolHandle> SymbolMap;
+    typedef std::map<std::string, SymbolAttributeHandle> SymbolAttributeMap;
 
     SymbolMap           symbol_map_;
-    static SymbolHandle handle_counter_;
+    SymbolAttributeMap  symbol_attribute_map_;
+    static Handle handle_counter_;
 };
 
 }
