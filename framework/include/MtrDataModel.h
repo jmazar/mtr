@@ -5,7 +5,8 @@
 
 enum MTR_STATUS
 {
-    MTR_STATUS_SUCCESS = 0
+    MTR_STATUS_SUCCESS = 0,
+    MTR_STATUS_FAILURE = 1
 };
 
 typedef uint64_t    Handle;

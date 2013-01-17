@@ -17,7 +17,7 @@ public:
     // virtual MTR_STATUS GetDates( std::vector<tm> & out_dates );
 
     virtual MTR_STATUS GetSymbols( std::vector<std::string> * out_symbols ) const;
-    virtual MTR_STATUS GetSymbolAttributes( SymbolHandle const & in_symbol_handle, std::vector<AttributeHandle> * out_attributes ) const;
+    virtual MTR_STATUS GetSymbolAttributes( SymbolHandle const & in_symbol_handle, std::vector<AttributeHandle> * out_attributes ) ;
 
     virtual MTR_STATUS PublishSymbol( std::string const & in_symbol_name, SymbolHandle * out_symbol_handle );
 

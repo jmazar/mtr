@@ -82,6 +82,8 @@ TEST_F(DataManagerTest, PublishSymbolAttributeTest)
     std::vector<AttributeHandle> attribute_handles;
     EXPECT_EQ(MTR_STATUS_SUCCESS, data_manager_->GetSymbolAttributes( symbol_handle, & attribute_handles ));
     EXPECT_EQ(1, attribute_handles.size());
+
+    EXPECT_EQ(MTR_STATUS_FAILURE, data_manager_->GetSymbolAttributes( symbol_handle, NULL ));
 }
 
 int main(int argc, char **argv) {

@@ -17,8 +17,15 @@ MTR_STATUS DataManager::GetSymbols( std::vector<std::string> * out_symbols ) con
     return MTR_STATUS_SUCCESS;
 }
 
-MTR_STATUS DataManager::GetSymbolAttributes( SymbolHandle const & in_symbol_handle, std::vector<AttributeHandle> * out_attributes ) const {
-    // *out_attributes = symbol_attribute_map_[in_symbol_handle];
+MTR_STATUS DataManager::GetSymbolAttributes( SymbolHandle const & in_symbol_handle, std::vector<AttributeHandle> * out_attributes ) {
+    if( NULL == out_attributes )
+        return MTR_STATUS_FAILURE;
+    out_attributes->clear();
+    std::list<AttributeHandle>::const_iterator iter;
+    std::list<AttributeHandle> * attribute_handles = &symbol_attribute_map_[in_symbol_handle];
+    for(iter = attribute_handles->begin(); iter != attribute_handles->end(); iter++) {
+        out_attributes->push_back(*iter);
+    }
     return MTR_STATUS_SUCCESS;
 }
 
