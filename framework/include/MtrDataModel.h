@@ -10,6 +10,6 @@ enum MTR_STATUS
 
 typedef uint64_t    Handle;
 typedef Handle      SymbolHandle;
-typedef Handle      SymbolAttributeHandle;
+typedef Handle      AttributeHandle;
 
 #endif // _MTR_DATA_MODEL_H
