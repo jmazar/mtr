@@ -64,10 +64,10 @@ TEST_F(DataManagerTest, GetSymbolsTest)
     SymbolHandle handle = 0;
     EXPECT_EQ(MTR_STATUS_SUCCESS, data_manager_->PublishSymbol( "INTC", & handle ));
 
-    std::vector<std::string> symbols;
+    std::vector<std::pair<std::string, SymbolHandle> > symbols;
     EXPECT_EQ(MTR_STATUS_SUCCESS, data_manager_->GetSymbols( & symbols ));
     EXPECT_EQ(1, symbols.size());
-    EXPECT_EQ("INTC", symbols[0]);
+    EXPECT_EQ("INTC", symbols[0].first);
 }
 
 TEST_F(DataManagerTest, PublishSymbolAttributeTest)
@@ -80,10 +80,22 @@ TEST_F(DataManagerTest, PublishSymbolAttributeTest)
     EXPECT_EQ(MTR_STATUS_SUCCESS, data_manager_->PublishSymbolAttribute( symbol_handle, attribute_handle ));
 
     std::vector<AttributeHandle> attribute_handles;
+    // Expect to see one
     EXPECT_EQ(MTR_STATUS_SUCCESS, data_manager_->GetSymbolAttributes( symbol_handle, & attribute_handles ));
     EXPECT_EQ(1, attribute_handles.size());
 
+    // Expect to not crash if you pass null
     EXPECT_EQ(MTR_STATUS_FAILURE, data_manager_->GetSymbolAttributes( symbol_handle, NULL ));
+
+    // Expect unique attributes
+    EXPECT_EQ(MTR_STATUS_SUCCESS, data_manager_->PublishSymbolAttribute( symbol_handle, attribute_handle ));
+    EXPECT_EQ(MTR_STATUS_SUCCESS, data_manager_->GetSymbolAttributes( symbol_handle, & attribute_handles ));
+    EXPECT_EQ(1, attribute_handles.size());
+
+    // Expect failure on invalid handles
+    EXPECT_EQ(MTR_STATUS_FAILURE, data_manager_->PublishSymbolAttribute( 0, attribute_handle ));
+    EXPECT_EQ(MTR_STATUS_FAILURE, data_manager_->PublishSymbolAttribute( symbol_handle, 0 ));
+
 }
 
 int main(int argc, char **argv) {

@@ -1,4 +1,5 @@
 #include "DataManager.h"
+#include "IDataProvider.h"
 
 using namespace mtr;
 
@@ -9,10 +10,10 @@ DataManager::DataManager() {
 DataManager::~DataManager() {
 }
 
-MTR_STATUS DataManager::GetSymbols( std::vector<std::string> * out_symbols ) const {
+MTR_STATUS DataManager::GetSymbols( std::vector<std::pair<std::string, SymbolHandle> > * out_symbols ) const {
     SymbolMap::const_iterator iter;
     for(iter = symbol_map_.begin(); iter != symbol_map_.end(); iter++) {
-        out_symbols->push_back(iter->first);
+        out_symbols->push_back(*iter);
     }
     return MTR_STATUS_SUCCESS;
 }
@@ -52,7 +53,13 @@ MTR_STATUS DataManager::PublishAttribute( std::string const & in_symbol_name, At
 }
 
 MTR_STATUS DataManager::PublishSymbolAttribute( SymbolHandle const & in_symbol_handle, AttributeHandle const & in_attribute_handle ) {
-    symbol_attribute_map_[in_symbol_handle].push_back(in_attribute_handle);
+    std::list<AttributeHandle> * attribute_handles = & symbol_attribute_map_[in_symbol_handle];
+    attribute_handles->push_back(in_attribute_handle);
+    attribute_handles->sort();
+    attribute_handles->unique();
+    return MTR_STATUS_SUCCESS;
+}
+MTR_STATUS DataManager::PublishData( IDataProvider const * const in_data_provider, SymbolHandle const & in_symbol_handle, AttributeHandle const & in_attribute_handle, std::vector<tm> const & in_dates) {
     return MTR_STATUS_SUCCESS;
 }
 
