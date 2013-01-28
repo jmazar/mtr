@@ -53,7 +53,9 @@ MTR_STATUS DataManager::PublishAttribute( std::string const & in_symbol_name, At
 }
 
 MTR_STATUS DataManager::PublishSymbolAttribute( SymbolHandle const & in_symbol_handle, AttributeHandle const & in_attribute_handle ) {
-    std::list<AttributeHandle> * attribute_handles = & symbol_attribute_map_[in_symbol_handle];
+    if( 0 == in_symbol_handle || 0 == in_attribute_handle)
+        return MTR_STATUS_FAILURE;
+    std::list<AttributeHandle> * attribute_handles = & symbol_attribute_map_[in_symbol_handle]; // TODO: Make this find instead of indexing directly.
     attribute_handles->push_back(in_attribute_handle);
     attribute_handles->sort();
     attribute_handles->unique();
