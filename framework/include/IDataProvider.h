@@ -1,10 +1,16 @@
 #ifndef _I_DATA_PROVIDER_H
 #define _I_DATA_PROVIDER_H
 
-class IDataProvider
-{
+#include "MtrDataModel.h"
+#include <vector>
+
+namespace mtr {
+
+class IDataProvider {
 public:
-    virtual void GetDataAttributes(/* date, symbol */) = 0;
+    virtual MTR_STATUS GetData(SymbolHandle const & in_symbol_handle, AttributeHandle const & in_attribute_handle, std::vector<tm> const & in_dates, std::vector<std::pair<tm, double> > * out_data) = 0;
 };
+
+}
 
 #endif //_I_DATA_PROVIDER_H

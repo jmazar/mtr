@@ -1,5 +1,6 @@
 #include "gtest/gtest.h"
 #include "DataManager.h"
+#include "SimpleDataProvider.h"
 
 using namespace mtr; 
 
@@ -95,7 +96,12 @@ TEST_F(DataManagerTest, PublishSymbolAttributeTest)
     // Expect failure on invalid handles
     EXPECT_EQ(MTR_STATUS_FAILURE, data_manager_->PublishSymbolAttribute( 0, attribute_handle ));
     EXPECT_EQ(MTR_STATUS_FAILURE, data_manager_->PublishSymbolAttribute( symbol_handle, 0 ));
+}
 
+TEST_F(DataManagerTest, PublishDataTest)
+{
+    SimpleDataProvider dp;
+    EXPECT_EQ(MTR_STATUS_SUCCESS, dp.Init());
 }
 
 int main(int argc, char **argv) {
