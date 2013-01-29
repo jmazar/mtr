@@ -3,7 +3,7 @@ SRC  = src/
 CFLAGS = -I$(IDIR)
 
 all: data_manager.o simple_data_provider.o
-	ar rvs $(LIBDIR)/framework.a $(ODIR)/data_manager.o
+	ar rvs $(LIBDIR)/framework.a $(ODIR)/data_manager.o $(ODIR)/simple_data_provider.o
 
 data_manager.o: $(IDIR)/MtrDataModel.h $(IDIR)/IDataManager.h $(IDIR)/DataManager.h $(SRC)/DataManager.cpp
 	$(CC) -c $(SRC)/DataManager.cpp -o $(ODIR)/data_manager.o $(CFLAGS)

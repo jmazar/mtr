@@ -10,7 +10,7 @@ DataManager::DataManager() {
 DataManager::~DataManager() {
 }
 
-MTR_STATUS DataManager::GetDates( std::vector<tm> * out_dates ) {
+MTR_STATUS DataManager::GetDataDates(SymbolHandle const & in_symbol_handle, AttributeHandle const & in_attribute_handle, std::vector<tm> * out_dates) {
     return MTR_STATUS_SUCCESS;
 }
 
