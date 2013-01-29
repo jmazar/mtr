@@ -10,7 +10,7 @@ DataManager::DataManager() {
 DataManager::~DataManager() {
 }
 
-MTR_STATUS DataManager::GetDataDates(SymbolHandle const & in_symbol_handle, AttributeHandle const & in_attribute_handle, std::vector<tm> * out_dates) {
+MTR_STATUS DataManager::GetDataDates(SymbolHandle const & in_symbol_handle, AttributeHandle const & in_attribute_handle, std::vector<tm> * out_dates) const {
     return MTR_STATUS_SUCCESS;
 }
 
@@ -27,7 +27,7 @@ MTR_STATUS DataManager::GetSymbolAttributes( SymbolHandle const & in_symbol_hand
         return MTR_STATUS_FAILURE;
     out_attributes->clear();
     std::list<AttributeHandle>::const_iterator iter;
-    std::list<AttributeHandle> * attribute_handles = &symbol_attribute_map_[in_symbol_handle];
+    std::list<AttributeHandle> const * const attribute_handles = &symbol_attribute_map_[in_symbol_handle];
     for(iter = attribute_handles->begin(); iter != attribute_handles->end(); iter++) {
         out_attributes->push_back(*iter);
     }
