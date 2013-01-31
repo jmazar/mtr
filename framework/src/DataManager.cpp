@@ -10,7 +10,7 @@ DataManager::DataManager() {
 DataManager::~DataManager() {
 }
 
-MTR_STATUS DataManager::GetDataDates(SymbolHandle const & in_symbol_handle, AttributeHandle const & in_attribute_handle, std::vector<tm> * out_dates) const {
+MTR_STATUS DataManager::GetDataDates(SymbolHandle const & in_symbol_handle, AttributeHandle const & in_attribute_handle, std::vector<Timestamp> * out_dates) const {
     return MTR_STATUS_SUCCESS;
 }
 
@@ -66,7 +66,7 @@ MTR_STATUS DataManager::PublishSymbolAttribute( SymbolHandle const & in_symbol_h
     return MTR_STATUS_SUCCESS;
 }
 
-MTR_STATUS DataManager::PublishData( IDataProvider const * const in_data_provider, SymbolHandle const & in_symbol_handle, AttributeHandle const & in_attribute_handle, std::vector<tm> const & in_dates) {
+MTR_STATUS DataManager::PublishData( IDataProvider const * const in_data_provider, SymbolHandle const & in_symbol_handle, AttributeHandle const & in_attribute_handle, std::vector<Timestamp> const & in_dates) {
     return MTR_STATUS_SUCCESS;
 }
 
