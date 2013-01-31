@@ -10,7 +10,12 @@ DataManager::DataManager() {
 DataManager::~DataManager() {
 }
 
-MTR_STATUS DataManager::GetDataDates(SymbolHandle const & in_symbol_handle, AttributeHandle const & in_attribute_handle, std::vector<Timestamp> * out_dates) const {
+MTR_STATUS DataManager::GetDataDates(SymbolHandle const & in_symbol_handle, AttributeHandle const & in_attribute_handle, std::vector<Timestamp> * out_dates) {
+    out_dates->clear();
+    SymbolAttributePair pair(in_symbol_handle, in_attribute_handle);
+    for(std::vector<Timestamp>::const_iterator iter = timestamp_map_[pair].begin(); iter != timestamp_map_[pair].end(); iter++) {
+        out_dates->push_back(*iter);
+    }
     return MTR_STATUS_SUCCESS;
 }
 
@@ -67,6 +72,15 @@ MTR_STATUS DataManager::PublishSymbolAttribute( SymbolHandle const & in_symbol_h
 }
 
 MTR_STATUS DataManager::PublishData( IDataProvider const * const in_data_provider, SymbolHandle const & in_symbol_handle, AttributeHandle const & in_attribute_handle, std::vector<Timestamp> const & in_dates) {
+    SymbolAttributePair pair(in_symbol_handle, in_attribute_handle);
+    DataProviderMap::const_iterator data_search_iter = data_provider_map_.find(pair);
+    if( data_search_iter == data_provider_map_.end() ) {
+        data_provider_map_[pair] = in_data_provider;
+    }
+
+    for(std::vector<Timestamp>::const_iterator iter = in_dates.begin(); iter != in_dates.end(); iter++) {
+        timestamp_map_[pair].push_back(*iter);
+    }
     return MTR_STATUS_SUCCESS;
 }
 

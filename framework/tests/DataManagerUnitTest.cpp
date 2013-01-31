@@ -110,6 +110,10 @@ TEST_F(DataManagerTest, PublishDataTest)
     EXPECT_EQ(MTR_STATUS_SUCCESS, data_manager_->GetSymbolAttributes( symbols[0].second, &attributes ));
     EXPECT_EQ(3, attributes.size());
 
+    std::vector<Timestamp> timestamps;
+    EXPECT_EQ(MTR_STATUS_SUCCESS, data_manager_->GetDataDates(symbols[0].second, attributes[0], &timestamps));
+    EXPECT_EQ(1, timestamps.size());
+
 }
 
 int main(int argc, char **argv) {

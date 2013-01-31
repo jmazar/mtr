@@ -26,5 +26,9 @@ MTR_STATUS SimpleDataProvider::Init(IDataManager * const in_data_manager) {
     in_data_manager->PublishSymbolAttribute(symbol_handle, high);
     in_data_manager->PublishSymbolAttribute(symbol_handle, low);
 
+    std::vector<Timestamp> dates;
+    dates.push_back(Timestamp(DAY, 2008, 1, 1, 0, 0, 0, 0));
+    in_data_manager->PublishData(this, symbol_handle, avg, dates);
+
     return MTR_STATUS_SUCCESS;
 }
