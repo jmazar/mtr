@@ -39,6 +39,10 @@ MTR_STATUS DataManager::GetSymbolAttributes( SymbolHandle const & in_symbol_hand
     return MTR_STATUS_SUCCESS;
 }
 
+MTR_STATUS DataManager::GetData(SymbolHandle const & in_symbol_handle, AttributeHandle const & in_attribute_handle, std::vector<Timestamp> const & in_dates, std::vector<std::pair<Timestamp, double> > * out_data) {
+    return data_provider_map_[SymbolAttributePair(in_symbol_handle, in_attribute_handle)]->GetData(in_symbol_handle, in_attribute_handle, in_dates, out_data);
+}
+
 MTR_STATUS DataManager::PublishSymbol( std::string const & in_symbol_name, SymbolHandle * out_symbol_handle ) {
     // Look up symbol name.
     SymbolMap::const_iterator search_iter = symbol_map_.find(in_symbol_name);
@@ -71,7 +75,7 @@ MTR_STATUS DataManager::PublishSymbolAttribute( SymbolHandle const & in_symbol_h
     return MTR_STATUS_SUCCESS;
 }
 
-MTR_STATUS DataManager::PublishData( IDataProvider const * const in_data_provider, SymbolHandle const & in_symbol_handle, AttributeHandle const & in_attribute_handle, std::vector<Timestamp> const & in_dates) {
+MTR_STATUS DataManager::PublishData( IDataProvider * const in_data_provider, SymbolHandle const & in_symbol_handle, AttributeHandle const & in_attribute_handle, std::vector<Timestamp> const & in_dates) {
     SymbolAttributePair pair(in_symbol_handle, in_attribute_handle);
     DataProviderMap::const_iterator data_search_iter = data_provider_map_.find(pair);
     if( data_search_iter == data_provider_map_.end() ) {

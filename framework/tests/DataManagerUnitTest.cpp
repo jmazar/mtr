@@ -114,6 +114,11 @@ TEST_F(DataManagerTest, PublishDataTest)
     EXPECT_EQ(MTR_STATUS_SUCCESS, data_manager_->GetDataDates(symbols[0].second, attributes[0], &timestamps));
     EXPECT_EQ(1, timestamps.size());
 
+    std::vector<std::pair<Timestamp, double> > data;
+    EXPECT_EQ(MTR_STATUS_SUCCESS, data_manager_->GetData(symbols[0].second, attributes[0], timestamps, &data));
+    EXPECT_EQ(1, data.size());
+    EXPECT_EQ(4, data[0].second);
+
 }
 
 int main(int argc, char **argv) {

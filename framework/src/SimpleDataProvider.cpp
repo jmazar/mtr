@@ -9,7 +9,10 @@ SimpleDataProvider::SimpleDataProvider() {
 SimpleDataProvider::~SimpleDataProvider() {
 }
 
-MTR_STATUS SimpleDataProvider::GetData(SymbolHandle const & in_symbol_handle, AttributeHandle const & in_attribute_handle, std::vector<tm> const & in_dates, std::vector<std::pair<tm, double> > * out_data) const {
+MTR_STATUS SimpleDataProvider::GetData(SymbolHandle const & in_symbol_handle, AttributeHandle const & in_attribute_handle, std::vector<Timestamp> const & in_dates, std::vector<std::pair<Timestamp, double> > * out_data) {
+    for(std::vector<Timestamp>::const_iterator iter = in_dates.begin(); iter != in_dates.end(); iter++) {
+        out_data->push_back(std::pair<Timestamp, double>(*iter, 4));
+    }
     return MTR_STATUS_SUCCESS;
 }
 
