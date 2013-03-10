@@ -22,7 +22,8 @@ public:
     virtual MTR_STATUS PublishData( IDataProvider * const in_data_provider, SymbolHandle const & in_symbol_handle, AttributeHandle const & in_attribute_handle, std::vector<Timestamp> const & in_dates);
 private:
     // TODO: This should be in sqlite...
-    Handle        GenerateHandle();
+    // TODO: Abstract this?
+    Handle        GenerateHandle(); // TODO: this shouldn't  be here, it should be inthe data model or something.
     typedef std::map<std::string, SymbolHandle> SymbolMap;
     typedef std::map<std::string, AttributeHandle> AttributeMap;
     typedef std::map<SymbolHandle, std::list<AttributeHandle> > SymbolAttributeMap;
