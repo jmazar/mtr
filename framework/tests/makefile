@@ -1,14 +1,14 @@
-SRC = ./
-IDIR = ../include
-GTESTDIR = ../../3rdparty/gtest-1.6.0
-GTESTINCLUDEDIR = $(GTESTDIR)/include
+ROOT = ../../
+include $(ROOT)makefile.include
+GTESTDIR = $(ROOT)3rdparty/gtest-1.6.0/
+GTESTIDIR = $(GTESTDIR)$(IDIR)
 GTESTLIBDIR =  $(GTESTDIR)/make
 
-CFLAGS = -I$(IDIR) -I$(GTESTINCLUDEDIR)
+CFLAGS = -I../$(IDIR) -I$(GTESTIDIR)
 
 all: data_manager_unit_test.o
-	$(CC) -o ../$(BDIR)/DataManagerUnitTest ../$(ODIR)/data_manager_unit_test.o ../$(LIBDIR)/framework.a $(GTESTLIBDIR)/gtest_main.a
+	$(CC) -o $(ROOT)$(BDIR)DataManagerUnitTest $(ROOT)$(ODIR)data_manager_unit_test.o $(ROOT)$(LIBDIR)framework.a $(GTESTLIBDIR)gtest_main.a
 
 data_manager_unit_test.o:
-	$(CC) -c $(SRC)DataManagerUnitTest.cpp  -o ../$(ODIR)/data_manager_unit_test.o $(CFLAGS)
+	$(CC) -c DataManagerUnitTest.cpp  -o $(ROOT)$(ODIR)data_manager_unit_test.o $(CFLAGS)
 

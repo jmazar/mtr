@@ -1,0 +1,6 @@
+export CC = g++
+export BDIR = artifacts/bin/
+export LIBDIR = artifacts/lib/
+export ODIR = artifacts/obj/
+export IDIR = include/
+export SRC = src/
