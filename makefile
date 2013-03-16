@@ -1,6 +1,6 @@
 ROOT = ./
 include $(ROOT)makefile.include
-GTESTDIR = /3rdparty/gtest-1.6.0
+GTESTDIR = 3rdparty/gtest-1.6.0
 
 all: framework tests
 
@@ -15,6 +15,7 @@ clean:
 	rm -rf $(ODIR)/*
 	rm -rf $(BDIR)/*
 	rm -rf $(LIBDIR)/*
+	cd $(GTESTDIR)/make/; $(MAKE) -f Makefile clean
 
-.PHONY: tests clean
+.PHONY: framework tests clean
 
