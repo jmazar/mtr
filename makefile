@@ -18,4 +18,3 @@ clean:
 	cd $(GTESTDIR)/make/; $(MAKE) -f Makefile clean
 
 .PHONY: framework tests clean
-

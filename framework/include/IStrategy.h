@@ -10,7 +10,6 @@ class IStrategy {
 public:
     virtual MTR_STATUS IsAvailable(IDataManager * data_manager) = 0;
     virtual MTR_STATUS Execute(Timestamp const & begin, Timestamp const & end) = 0;
-    
 };
 
 }
