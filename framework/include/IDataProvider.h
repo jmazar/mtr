@@ -5,11 +5,12 @@
 #include <vector>
 
 namespace mtr {
+class IDataManager;
 
 class IDataProvider {
 public:
     // TODO: Might need to add Publish method
-    virtual MTR_STATUS PublishData( /* A data manager */ ) = 0;
+    virtual MTR_STATUS PublishData( IDataManager * const in_data_manager ) = 0;
     virtual MTR_STATUS GetData( SymbolHandle const & in_symbol_handle, 
                                 AttributeHandle const & in_attribute_handle, 
                                 std::vector<Timestamp> const & in_dates, 

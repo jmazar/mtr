@@ -16,7 +16,7 @@ MTR_STATUS SimpleDataProvider::GetData(SymbolHandle const & in_symbol_handle, At
     return MTR_STATUS_SUCCESS;
 }
 
-MTR_STATUS SimpleDataProvider::Init(IDataManager * const in_data_manager) {
+MTR_STATUS SimpleDataProvider::PublishData( IDataManager * const in_data_manager ) {
     SymbolHandle symbol_handle;
     in_data_manager->PublishSymbol("INTC", &symbol_handle);
 

@@ -101,7 +101,7 @@ TEST_F(DataManagerTest, PublishSymbolAttributeTest)
 TEST_F(DataManagerTest, PublishDataTest)
 {
     SimpleDataProvider dp;
-    EXPECT_EQ(MTR_STATUS_SUCCESS, dp.Init(data_manager_));
+    EXPECT_EQ(MTR_STATUS_SUCCESS, dp.PublishData(data_manager_));
 
     std::vector<std::pair<std::string, SymbolHandle> > symbols;
     EXPECT_EQ(MTR_STATUS_SUCCESS, data_manager_->GetSymbols( &symbols ));
