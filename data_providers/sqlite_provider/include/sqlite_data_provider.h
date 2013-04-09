@@ -1,7 +1,7 @@
 #ifndef _SQLITE_DATA_PROVIDER_H
 #define _SQLITE_DATA_PROVIDER_H
 
-#include "IDataProvider"
+#include "IDataProvider.h"
 
 namespace mtr
 {
