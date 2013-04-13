@@ -2,16 +2,18 @@
 #define _SQLITE_DATA_PROVIDER_H
 
 #include "IDataProvider.h"
+#include <string>
+
+struct sqlite3;
 
 namespace mtr
 {
-class sqlite3;
 
 class SqliteDataProvider : public IDataProvider
 {
 public:
-    SqliteDataProivder();
-    virtual ~SqliteDataProivder();
+    SqliteDataProvider();
+    virtual ~SqliteDataProvider();
     virtual MTR_STATUS PublishData( IDataManager * const in_data_manager );
     virtual MTR_STATUS GetData( SymbolHandle const & in_symbol_handle, 
                                 AttributeHandle const & in_attribute_handle, 
