@@ -21,4 +21,5 @@ protected:
 TEST_F(SqliteDataProviderTest, LoadDBTest)
 {
     SqliteDataProvider provider;
+    EXPECT_EQ(MTR_STATUS_SUCCESS, provider.OpenDatabase("test"));
 }

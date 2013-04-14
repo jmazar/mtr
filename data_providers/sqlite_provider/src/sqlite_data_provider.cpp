@@ -8,7 +8,7 @@ SqliteDataProvider::SqliteDataProvider() :
 }
 SqliteDataProvider::~SqliteDataProvider() {
     if(database_)
-        delete database_; // TODO why is this a warning
+        sqlite3_close(database_);
 }
 
 MTR_STATUS SqliteDataProvider::PublishData( IDataManager * const in_data_manager ) {
@@ -18,7 +18,11 @@ MTR_STATUS SqliteDataProvider::GetData( SymbolHandle const & in_symbol_handle,
                             std::vector<Timestamp> const & in_dates, 
                             std::vector<std::pair<Timestamp, double> > * out_data) {
 }
-MTR_STATUS OpenDatabase( std::string in_database_name ) {
+MTR_STATUS SqliteDataProvider::OpenDatabase( std::string in_database_name ) {
+	if( SQLITE_OK == sqlite3_open(in_database_name.c_str(), &database_) ) {
+        return MTR_STATUS_SUCCESS;
+	}
+    return MTR_STATUS_FAILURE;
 }
 MTR_STATUS SqliteDataProvider::ReadCSVFile( std::string in_file_name ) {
 }
