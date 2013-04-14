@@ -20,5 +20,5 @@ protected:
 
 TEST_F(SqliteDataProviderTest, LoadDBTest)
 {
-    SqliteDataProivder provider;
+    SqliteDataProvider provider;
 }

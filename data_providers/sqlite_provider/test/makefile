@@ -1,13 +1,15 @@
-ROOT = ../../
+ROOT = ../../../
 include $(ROOT)makefile.include
+SQLITEDIR = $(ROOT)3rdparty/sqlite
+FRAMEWORKDIR = $(ROOT)framework/$(IDIR)
 GTESTDIR = $(ROOT)3rdparty/gtest-1.6.0/
 GTESTIDIR = $(GTESTDIR)$(IDIR)
 GTESTLIBDIR =  $(GTESTDIR)make/
 
-CFLAGS = -I../$(IDIR) -I$(GTESTIDIR)
+CFLAGS = -I../$(IDIR) -I$(GTESTIDIR) -I$(FRAMEWORKDIR)
 
-all: data_manager_unit_test.o
-	$(CC) -o $(ROOT)$(BDIR)DataManagerUnitTest $(ROOT)$(ODIR)data_manager_unit_test.o $(ROOT)$(LIBDIR)framework.a $(GTESTLIBDIR)gtest_main.a -pthread
+all: sqlite_data_provider_gtest.o
+	$(CC) -o $(ROOT)$(BDIR)sqlite_data_provider_gtest $(ROOT)$(ODIR)sqlite_data_provider_gtest.o $(ROOT)$(LIBDIR)sqlite_data_provider.a $(ROOT)$(LIBDIR)framework.a $(GTESTLIBDIR)gtest_main.a -pthread
 
-data_manager_unit_test.o:
-	$(CC) -c DataManagerUnitTest.cpp  -o $(ROOT)$(ODIR)data_manager_unit_test.o $(CFLAGS)
+sqlite_data_provider_gtest.o:
+	$(CC) -c sqlite_data_provider_gtest.cpp  -o $(ROOT)$(ODIR)sqlite_data_provider_gtest.o $(CFLAGS)
