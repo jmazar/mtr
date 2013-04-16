@@ -4,6 +4,7 @@
 #include <stdint.h>
 
 namespace mtr {
+// TODO Don't alternate between failure/error
 enum MTR_STATUS
 {
     MTR_STATUS_SUCCESS = 0,

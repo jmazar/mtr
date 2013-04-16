@@ -20,11 +20,11 @@ public:
                                 std::vector<Timestamp> const & in_dates, 
                                 std::vector<std::pair<Timestamp, double> > * out_data);
     MTR_STATUS OpenDatabase( std::string in_database_name );
-    MTR_STATUS ReadCSVFile( std::string in_file_name );
+    MTR_STATUS ReadYahooCSVFile( std::string in_file_name );
 private:
     SqliteDataProvider( SqliteDataProvider const & );
     SqliteDataProvider const & operator=( SqliteDataProvider const & );
-    MTR_STATUS  ExecuteStatement(std::string const & statement);
+    MTR_STATUS  ExecuteStatement(std::string const & in_statement);
 
     sqlite3 * database_;
 };

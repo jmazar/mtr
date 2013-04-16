@@ -26,11 +26,11 @@ TEST_F(SqliteDataProviderTest, LoadDBTest) {
     system("rm test");
 }
 
-TEST_F(SqliteDataProviderTest, ReadCSVTest) {
+TEST_F(SqliteDataProviderTest, ReadYahooCSVTest) {
     SqliteDataProvider provider;
-    EXPECT_EQ(MTR_STATUS_SUCCESS, provider.ReadCSVFile("aapl.csv"));
+    EXPECT_EQ(MTR_STATUS_FAILURE, provider.ReadYahooCSVFile("ge.csv"));
     EXPECT_EQ(MTR_STATUS_SUCCESS, provider.OpenDatabase("test"));
-    EXPECT_EQ(MTR_STATUS_SUCCESS, provider.ReadCSVFile("aapl.csv"));
+    EXPECT_EQ(MTR_STATUS_SUCCESS, provider.ReadYahooCSVFile("ge.csv"));
     system("rm test");
 
 }
