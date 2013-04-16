@@ -24,6 +24,7 @@ public:
 private:
     SqliteDataProvider( SqliteDataProvider const & );
     SqliteDataProvider const & operator=( SqliteDataProvider const & );
+    MTR_STATUS  ExecuteStatement(std::string const & statement);
 
     sqlite3 * database_;
 };
