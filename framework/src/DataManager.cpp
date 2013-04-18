@@ -21,7 +21,7 @@ MTR_STATUS DataManager::GetDataDates(   SymbolHandle const & in_symbol_handle,
     return MTR_STATUS_SUCCESS;
 }
 
-MTR_STATUS DataManager::GetSymbols( std::vector<std::pair<std::string, 
+MTR_STATUS DataManager::GetSymbols( std::vector<std::pair<std::string,
                                     SymbolHandle> > * out_symbols ) const {
     SymbolMap::const_iterator iter;
     for(iter = symbol_map_.begin(); iter != symbol_map_.end(); iter++) {
@@ -30,7 +30,8 @@ MTR_STATUS DataManager::GetSymbols( std::vector<std::pair<std::string,
     return MTR_STATUS_SUCCESS;
 }
 
-MTR_STATUS DataManager::GetSymbolAttributes( SymbolHandle const & in_symbol_handle, std::vector<AttributeHandle> * out_attributes ) {
+MTR_STATUS DataManager::GetSymbolAttributes(    SymbolHandle const & in_symbol_handle,
+                                                std::vector<AttributeHandle> * out_attributes ) {
     if( NULL == out_attributes )
         return MTR_STATUS_FAILURE;
     out_attributes->clear();

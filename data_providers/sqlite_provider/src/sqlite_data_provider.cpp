@@ -1,6 +1,7 @@
 #include "sqlite_data_provider.h"
 #include "sqlite3.h"
 #include <stdio.h>
+#include <sstream>
 
 using namespace mtr;
 
@@ -23,10 +24,7 @@ MTR_STATUS SqliteDataProvider::OpenDatabase( std::string in_database_name ) {
     MTR_STATUS status = MTR_STATUS_SUCCESS;
     if( SQLITE_OK != sqlite3_open(in_database_name.c_str(), &database_) ) 
         return MTR_STATUS_SQLITE_ERROR;
-    status = ExecuteStatement("CREATE TABLE IF NOT EXISTS security_names ( id INTEGER PRIMARY KEY, name TEXT);");
-    if( MTR_STATUS_SUCCESS != status )
-        return status;
-    status = ExecuteStatement("CREATE TABLE IF NOT EXISTS securities ( id INTEGER PRIMARY KEY, name_id INTEGER, date TEXT, open REAL, close REAL, high REAL, low REAL, volume INTEGER );");
+    status = ExecuteStatement("CREATE TABLE IF NOT EXISTS yahoo_data ( id INTEGER PRIMARY KEY, symbol TEXT, date TEXT, open REAL, high REAL, low REAL, close REAL, volume INTEGER, adj_close REAL );");
     if( MTR_STATUS_SUCCESS != status )
         return status;
     return status;
@@ -41,10 +39,30 @@ MTR_STATUS SqliteDataProvider::ReadYahooCSVFile( std::string in_file_name ) {
     if(!file)
         return MTR_STATUS_FAILURE;
     char line[256];
+    MTR_STATUS status = MTR_STATUS_SUCCESS;
     while( NULL != fgets( line, 256, file ) ) {
-        printf("%s", line);
+        size_t length = strlen( line );
+        line[length - 1] = '\0'; // Removing newline
+        std::string statement("INSERT INTO yahoo_data ( symbol, date, open, high, low, close, volume, adj_close ) VALUES ('");
+        std::stringstream stream(line);
+        std::string token;
+        std::getline( stream, token, ',' );
+        statement += token + "','";
+        std::getline( stream, token, ',' );
+        statement += token + "',";
+
+        while( std::getline( stream, token, ',' ) ) {
+            statement += token + ",";
+        }
+        statement = statement.substr(0, statement.size()-1); // Remove trailing ','
+        statement += ");";
+
+        printf("%s\n", statement.c_str());
+        status = ExecuteStatement(statement);
+        if(MTR_STATUS_SUCCESS != status)
+            return status;
     }
-    return MTR_STATUS_SUCCESS;
+    return status;
 }
 
 MTR_STATUS SqliteDataProvider::ExecuteStatement( std::string const & in_statement) {
