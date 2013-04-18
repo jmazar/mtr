@@ -5,9 +5,11 @@ GTESTDIR = 3rdparty/gtest-1.6.0
 all: framework tests
 
 framework:
-	cd framework; $(MAKE) -f framework/makefile
+	echo 'Building Framework'
+	cd framework; $(MAKE) -f makefile
 
 tests: framework
+	ehcho 'Building Tests'
 	cd $(GTESTDIR)/make/; $(MAKE) -f Makefile all
 	cd $(DIR)/framework/; $(MAKE) -f makefile tests
 
