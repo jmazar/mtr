@@ -32,5 +32,17 @@ TEST_F(SqliteDataProviderTest, ReadYahooCSVTest) {
     EXPECT_EQ(MTR_STATUS_SUCCESS, provider.OpenDatabase("test"));
     EXPECT_EQ(MTR_STATUS_SUCCESS, provider.ReadYahooCSVFile("ge.csv"));
     system("rm test");
+}
 
+TEST_F(SqliteDataProviderTest, PublishSymbolTest) {
+    SqliteDataProvider provider;
+    EXPECT_EQ(MTR_STATUS_SUCCESS, provider.OpenDatabase("test"));
+    EXPECT_EQ(MTR_STATUS_SUCCESS, provider.ReadYahooCSVFile("ge.csv"));
+    provider.PublishData(data_manager_);
+
+    std::vector<std::pair<std::string, SymbolHandle> > symbols;
+    EXPECT_EQ(MTR_STATUS_SUCCESS, data_manager_->GetSymbols( & symbols ));
+    EXPECT_EQ(1, symbols.size());
+    if(0 < symbols.size())
+        EXPECT_EQ("GE", symbols[0].first);
 }
