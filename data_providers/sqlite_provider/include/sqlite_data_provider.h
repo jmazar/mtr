@@ -24,8 +24,6 @@ public:
 private:
     SqliteDataProvider( SqliteDataProvider const & );
     SqliteDataProvider const & operator=( SqliteDataProvider const & );
-    MTR_STATUS  ExecuteInsertStatement(std::string const & in_statement);
-    MTR_STATUS  ExecuteSelectStatement(std::string const & in_statement);
     inline MTR_STATUS CallSqlite(int in_return_code);
     inline MTR_STATUS CallSqliteExpect(int in_return_code, int in_expected_code);
 
