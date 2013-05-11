@@ -1,3 +1,4 @@
+#include "IDataManager.h"
 #include "sqlite_data_provider.h"
 #include "sqlite3.h"
 #include <stdio.h>
@@ -17,9 +18,28 @@ MTR_STATUS SqliteDataProvider::PublishData( IDataManager * const in_data_manager
     std::string sql = "SELECT * from yahoo_data;";
     sqlite3_stmt * statement = NULL;
     MTR_STATUS status = CallSqlite(sqlite3_prepare_v2(database_, sql.c_str(), -1, &statement, 0));
-    status = CallSqliteExpect(sqlite3_step(statement), SQLITE_ROW);
-    unsigned char const * column = sqlite3_column_text(statement, 1);
-    printf("column: %s\n", column);
+    //status = CallSqliteExpect(sqlite3_step(statement), SQLITE_ROW);
+    while(1) {
+        int sqlite_return = sqlite3_step(statement);
+        if(SQLITE_ROW == sqlite_return) {
+            unsigned char const * symbol = sqlite3_column_text(statement, 1);
+            unsigned char const * date = sqlite3_column_text(statement, 2);
+            double open = sqlite3_column_double(statement,3);
+            double high = sqlite3_column_double(statement,4);
+            double low = sqlite3_column_double(statement,4);
+            double close = sqlite3_column_double(statement,5);
+            double volume = sqlite3_column_double(statement,6);
+            double adj_close = sqlite3_column_double(statement,7);
+            SymbolHandle handle;
+            in_data_manager->PublishSymbol(reinterpret_cast<char const *>(symbol), &handle);
+        }
+        else if(SQLITE_DONE == sqlite_return) {
+            break;
+        }
+        else {
+            // Error handling...
+        }
+    }
 
     return status;
 }
