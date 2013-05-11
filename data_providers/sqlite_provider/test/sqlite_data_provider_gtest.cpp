@@ -43,6 +43,12 @@ TEST_F(SqliteDataProviderTest, PublishSymbolTest) {
     std::vector<std::pair<std::string, SymbolHandle> > symbols;
     EXPECT_EQ(MTR_STATUS_SUCCESS, data_manager_->GetSymbols( & symbols ));
     EXPECT_EQ(1, symbols.size());
-    if(0 < symbols.size())
+    if(0 < symbols.size()) {
         EXPECT_EQ("GE", symbols[0].first);
+        std::vector<AttributeHandle> attribute_handles;
+        EXPECT_EQ(MTR_STATUS_SUCCESS, data_manager_->GetSymbolAttributes( 
+            symbols[0].second,
+            &attribute_handles ));
+        EXPECT_EQ(6, attribute_handles.size());
+    }
 }

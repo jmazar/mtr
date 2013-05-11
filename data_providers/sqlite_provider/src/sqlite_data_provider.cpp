@@ -6,6 +6,9 @@
 
 using namespace mtr;
 
+std::string ATTRIBUTE_NAMES[] = { "open", "high", "low", "close", "volume", "adj_close"};
+static int const NUM_ATTRIBUTE_NAMES = 6;
+
 SqliteDataProvider::SqliteDataProvider() :
     database_(NULL) {
 }
@@ -30,8 +33,13 @@ MTR_STATUS SqliteDataProvider::PublishData( IDataManager * const in_data_manager
             double close = sqlite3_column_double(statement,5);
             double volume = sqlite3_column_double(statement,6);
             double adj_close = sqlite3_column_double(statement,7);
-            SymbolHandle handle;
-            in_data_manager->PublishSymbol(reinterpret_cast<char const *>(symbol), &handle);
+            SymbolHandle symbol_handle;
+            in_data_manager->PublishSymbol(reinterpret_cast<char const *>(symbol), &symbol_handle);
+            AttributeHandle attribute_handle;
+            for(int i = 0; i < NUM_ATTRIBUTE_NAMES; i++) {
+                in_data_manager->PublishAttribute(ATTRIBUTE_NAMES[i], &attribute_handle);
+                in_data_manager->PublishSymbolAttribute(symbol_handle, attribute_handle);
+            }
         }
         else if(SQLITE_DONE == sqlite_return) {
             break;
