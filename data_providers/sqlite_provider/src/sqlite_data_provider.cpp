@@ -40,6 +40,7 @@ MTR_STATUS SqliteDataProvider::PublishData( IDataManager * const in_data_manager
                 in_data_manager->PublishAttribute(ATTRIBUTE_NAMES[i], &attribute_handle);
                 in_data_manager->PublishSymbolAttribute(symbol_handle, attribute_handle);
             }
+
         }
         else if(SQLITE_DONE == sqlite_return) {
             break;
