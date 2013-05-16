@@ -25,8 +25,8 @@ MTR_STATUS SqliteDataProvider::PublishData( IDataManager * const in_data_manager
     while(1) {
         int sqlite_return = sqlite3_step(statement);
         if(SQLITE_ROW == sqlite_return) {
-            unsigned char const * symbol = sqlite3_column_text(statement, 1);
-            unsigned char const * date = sqlite3_column_text(statement, 2);
+            char const * symbol = reinterpret_cast<char const *>(sqlite3_column_text(statement, 1));
+            char const * date = reinterpret_cast<char const *>(sqlite3_column_text(statement, 2));
             double open = sqlite3_column_double(statement,3);
             double high = sqlite3_column_double(statement,4);
             double low = sqlite3_column_double(statement,4);
@@ -34,13 +34,15 @@ MTR_STATUS SqliteDataProvider::PublishData( IDataManager * const in_data_manager
             double volume = sqlite3_column_double(statement,6);
             double adj_close = sqlite3_column_double(statement,7);
             SymbolHandle symbol_handle;
-            in_data_manager->PublishSymbol(reinterpret_cast<char const *>(symbol), &symbol_handle);
+            in_data_manager->PublishSymbol(symbol, &symbol_handle);
+            symbol_handle_map_[symbol_handle] = symbol;
             for(int i = 0; i < NUM_ATTRIBUTE_NAMES; i++) {
                 AttributeHandle attribute_handle;
                 in_data_manager->PublishAttribute(ATTRIBUTE_NAMES[i], &attribute_handle);
+                attribute_handle_map_[attribute_handle] = ATTRIBUTE_NAMES[i];
                 in_data_manager->PublishSymbolAttribute(symbol_handle, attribute_handle);
                 Timestamp timestamp;
-                SqlToTimestamp(reinterpret_cast<char const *>(date), &timestamp);
+                SqlToTimestamp(date, &timestamp);
                 std::vector<Timestamp> timestamps;
                 timestamps.push_back(timestamp);
                 in_data_manager->PublishData(this, symbol_handle, attribute_handle, timestamps);
@@ -62,7 +64,64 @@ MTR_STATUS SqliteDataProvider::GetData( SymbolHandle const & in_symbol_handle,
                             AttributeHandle const & in_attribute_handle, 
                             std::vector<Timestamp> const & in_dates, 
                             std::vector<std::pair<Timestamp, double> > * out_data) {
+    for(std::vector<Timestamp>::const_iterator iter = in_dates.begin(); iter != in_dates.end(); iter++) {
+        std::string timestamp;
+        TimestampToSql(&timestamp, *iter);
+        int const STR_SIZE_MAX = 16;
 
+        std::stringstream stream;
+        stream  << "SELECT "
+                << attribute_handle_map_[in_attribute_handle]
+                << " from yahoo_data WHERE symbol='" 
+                << symbol_handle_map_[in_symbol_handle]
+                << "' AND date='"
+                << timestamp
+                << "';";
+        std::string sql = stream.str();
+        sqlite3_stmt * statement = NULL;
+        MTR_STATUS status = CallSqlite(sqlite3_prepare_v2(database_, sql.c_str(), -1, &statement, 0));
+        //status = CallSqliteExpect(sqlite3_step(statement), SQLITE_ROW);
+        while(1) {
+            int sqlite_return = sqlite3_step(statement);
+            if(SQLITE_ROW == sqlite_return) {
+                double open = sqlite3_column_double(statement,3);
+                double high = sqlite3_column_double(statement,4);
+                double low = sqlite3_column_double(statement,4);
+                double close = sqlite3_column_double(statement,5);
+                double volume = sqlite3_column_double(statement,6);
+                double adj_close = sqlite3_column_double(statement,7);
+                std::pair<Timestamp,double> pair;
+                pair.first = *iter;
+                if(0 == strncmp("open", attribute_handle_map_[in_attribute_handle].c_str(), STR_SIZE_MAX)) {
+                    pair.second = open;
+                }
+                else if(0 == strncmp("high", attribute_handle_map_[in_attribute_handle].c_str(), STR_SIZE_MAX)) {
+                    pair.second = high;
+                }
+                else if(0 == strncmp("low", attribute_handle_map_[in_attribute_handle].c_str(), STR_SIZE_MAX)) {
+                    pair.second = low;
+                }
+                else if(0 == strncmp("close", attribute_handle_map_[in_attribute_handle].c_str(), STR_SIZE_MAX)) {
+                    pair.second = close;
+                }
+                else if(0 == strncmp("volume", attribute_handle_map_[in_attribute_handle].c_str(), STR_SIZE_MAX)) {
+                    pair.second = volume;
+                }
+                else if(0 == strncmp("adj_close", attribute_handle_map_[in_attribute_handle].c_str(), STR_SIZE_MAX)) {
+                    pair.second = adj_close;
+                }
+                out_data->push_back(pair);
+            }
+            else if(SQLITE_DONE == sqlite_return) {
+                break;
+            }
+            else {
+                // Error handling...
+            }
+        }
+    }
+
+    return MTR_STATUS_SUCCESS;
 }
 
 MTR_STATUS SqliteDataProvider::OpenDatabase( std::string in_database_name ) {

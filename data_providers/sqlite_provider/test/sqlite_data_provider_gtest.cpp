@@ -109,6 +109,6 @@ TEST_F(SqliteDataProviderTest, GetDataTest) {
         ASSERT_NE(0, dates.size());
         std::vector<std::pair<Timestamp, double> > data;
         EXPECT_EQ(MTR_STATUS_SUCCESS, data_manager_->GetData( symbols[0].second, *iter, dates, &data ));
-        ASSERT_EQ(dates.size(), data.size());
+        EXPECT_EQ(dates.size(), data.size());
     }
 }

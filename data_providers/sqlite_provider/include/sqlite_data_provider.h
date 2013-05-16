@@ -2,6 +2,7 @@
 #define _SQLITE_DATA_PROVIDER_H
 
 #include "IDataProvider.h"
+#include <map>
 #include <string>
 
 struct sqlite3;
@@ -29,6 +30,8 @@ private:
     MTR_STATUS SqlToTimestamp(std::string const & in_time, Timestamp * out_timestamp);
     MTR_STATUS TimestampToSql(std::string * out_sql, Timestamp const & in_timestamp);
 
+    std::map<SymbolHandle, std::string> symbol_handle_map_;
+    std::map<AttributeHandle, std::string> attribute_handle_map_;
     sqlite3 * database_;
 };
 }
