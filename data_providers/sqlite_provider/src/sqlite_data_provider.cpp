@@ -35,10 +35,15 @@ MTR_STATUS SqliteDataProvider::PublishData( IDataManager * const in_data_manager
             double adj_close = sqlite3_column_double(statement,7);
             SymbolHandle symbol_handle;
             in_data_manager->PublishSymbol(reinterpret_cast<char const *>(symbol), &symbol_handle);
-            AttributeHandle attribute_handle;
             for(int i = 0; i < NUM_ATTRIBUTE_NAMES; i++) {
+                AttributeHandle attribute_handle;
                 in_data_manager->PublishAttribute(ATTRIBUTE_NAMES[i], &attribute_handle);
                 in_data_manager->PublishSymbolAttribute(symbol_handle, attribute_handle);
+                Timestamp timestamp;
+                SqlToTimestamp(reinterpret_cast<char const *>(date), &timestamp);
+                std::vector<Timestamp> timestamps;
+                timestamps.push_back(timestamp);
+                in_data_manager->PublishData(this, symbol_handle, attribute_handle, timestamps);
             }
 
         }
@@ -112,5 +117,26 @@ inline MTR_STATUS SqliteDataProvider::CallSqliteExpect(int in_return_code, int i
             return MTR_STATUS_SQLITE_ERROR;
         }
     }
+    return MTR_STATUS_SUCCESS;
+}
+
+MTR_STATUS SqliteDataProvider::SqlToTimestamp(std::string const & in_time, Timestamp * out_timestamp) {
+    out_timestamp->granularity = DAY;
+    std::stringstream stream (in_time);
+    std::string token;
+    std::getline( stream, token, '-' );
+    out_timestamp->year = atoi(token.c_str());
+    std::getline( stream, token, '-' );
+    out_timestamp->month = atoi(token.c_str());
+    std::getline( stream, token, '-' );
+    out_timestamp->day = atoi(token.c_str());
+
+    return MTR_STATUS_SUCCESS;
+}
+MTR_STATUS SqliteDataProvider::TimestampToSql(std::string * out_sql, Timestamp const & in_timestamp) {
+    std::stringstream stream;
+    stream << in_timestamp.year << "-" << in_timestamp.month << "-" << in_timestamp.day;
+    *out_sql = stream.str();
+
     return MTR_STATUS_SUCCESS;
 }
