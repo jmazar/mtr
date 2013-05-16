@@ -133,6 +133,7 @@ MTR_STATUS SqliteDataProvider::SqlToTimestamp(std::string const & in_time, Times
 
     return MTR_STATUS_SUCCESS;
 }
+
 MTR_STATUS SqliteDataProvider::TimestampToSql(std::string * out_sql, Timestamp const & in_timestamp) {
     std::stringstream stream;
     stream << in_timestamp.year << "-" << in_timestamp.month << "-" << in_timestamp.day;
