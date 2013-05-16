@@ -4,10 +4,12 @@
 #include <stdint.h>
 
 namespace mtr {
+// TODO Don't alternate between failure/error
 enum MTR_STATUS
 {
     MTR_STATUS_SUCCESS = 0,
-    MTR_STATUS_FAILURE = 1
+    MTR_STATUS_FAILURE = 1,
+    MTR_STATUS_SQLITE_ERROR = 2
 };
 
 typedef uint64_t    Handle;

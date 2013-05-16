@@ -7,7 +7,6 @@
 
 #include "MtrDataModel.h"
 
-
 namespace mtr {
 class IDataProvider;
 
