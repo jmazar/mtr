@@ -46,6 +46,7 @@ TEST_F(SqliteDataProviderTest, PublishSymbolTest) {
     if(0 < symbols.size()) {
         EXPECT_EQ("GE", symbols[0].first);
     }
+    system("rm test");
 }
 
 TEST_F(SqliteDataProviderTest, PublishAttributeTest) {
@@ -63,6 +64,7 @@ TEST_F(SqliteDataProviderTest, PublishAttributeTest) {
         symbols[0].second,
         &attribute_handles ));
     EXPECT_EQ(6, attribute_handles.size());
+    system("rm test");
 }
 
 TEST_F(SqliteDataProviderTest, PublishDataDatesTest) {
@@ -86,6 +88,7 @@ TEST_F(SqliteDataProviderTest, PublishDataDatesTest) {
         ASSERT_NE(0, dates.size());
 
     }
+    system("rm test");
 }
 
 TEST_F(SqliteDataProviderTest, GetDataTest) {
@@ -106,9 +109,10 @@ TEST_F(SqliteDataProviderTest, GetDataTest) {
     for(std::vector<AttributeHandle>::const_iterator iter = attribute_handles.begin(); iter != attribute_handles.end(); iter++) {
         std::vector<Timestamp> dates;
         EXPECT_EQ(MTR_STATUS_SUCCESS, data_manager_->GetDataDates(symbols[0].second, *iter, &dates));
-        ASSERT_NE(0, dates.size());
+        ASSERT_EQ(825, dates.size()); // 825 is # of dates in ge.csv
         std::vector<std::pair<Timestamp, double> > data;
         EXPECT_EQ(MTR_STATUS_SUCCESS, data_manager_->GetData( symbols[0].second, *iter, dates, &data ));
         EXPECT_EQ(dates.size(), data.size());
     }
+    system("rm test");
 }

@@ -3,6 +3,7 @@
 #include "sqlite3.h"
 #include <stdio.h>
 #include <sstream>
+#include <iomanip>
 
 using namespace mtr;
 
@@ -80,36 +81,11 @@ MTR_STATUS SqliteDataProvider::GetData( SymbolHandle const & in_symbol_handle,
         std::string sql = stream.str();
         sqlite3_stmt * statement = NULL;
         MTR_STATUS status = CallSqlite(sqlite3_prepare_v2(database_, sql.c_str(), -1, &statement, 0));
-        //status = CallSqliteExpect(sqlite3_step(statement), SQLITE_ROW);
         while(1) {
             int sqlite_return = sqlite3_step(statement);
             if(SQLITE_ROW == sqlite_return) {
-                double open = sqlite3_column_double(statement,3);
-                double high = sqlite3_column_double(statement,4);
-                double low = sqlite3_column_double(statement,4);
-                double close = sqlite3_column_double(statement,5);
-                double volume = sqlite3_column_double(statement,6);
-                double adj_close = sqlite3_column_double(statement,7);
-                std::pair<Timestamp,double> pair;
-                pair.first = *iter;
-                if(0 == strncmp("open", attribute_handle_map_[in_attribute_handle].c_str(), STR_SIZE_MAX)) {
-                    pair.second = open;
-                }
-                else if(0 == strncmp("high", attribute_handle_map_[in_attribute_handle].c_str(), STR_SIZE_MAX)) {
-                    pair.second = high;
-                }
-                else if(0 == strncmp("low", attribute_handle_map_[in_attribute_handle].c_str(), STR_SIZE_MAX)) {
-                    pair.second = low;
-                }
-                else if(0 == strncmp("close", attribute_handle_map_[in_attribute_handle].c_str(), STR_SIZE_MAX)) {
-                    pair.second = close;
-                }
-                else if(0 == strncmp("volume", attribute_handle_map_[in_attribute_handle].c_str(), STR_SIZE_MAX)) {
-                    pair.second = volume;
-                }
-                else if(0 == strncmp("adj_close", attribute_handle_map_[in_attribute_handle].c_str(), STR_SIZE_MAX)) {
-                    pair.second = adj_close;
-                }
+                double data = sqlite3_column_double(statement,1);
+                std::pair<Timestamp,double> pair(*iter, data);
                 out_data->push_back(pair);
             }
             else if(SQLITE_DONE == sqlite_return) {
@@ -189,14 +165,12 @@ MTR_STATUS SqliteDataProvider::SqlToTimestamp(std::string const & in_time, Times
     out_timestamp->month = atoi(token.c_str());
     std::getline( stream, token, '-' );
     out_timestamp->day = atoi(token.c_str());
-
     return MTR_STATUS_SUCCESS;
 }
 
 MTR_STATUS SqliteDataProvider::TimestampToSql(std::string * out_sql, Timestamp const & in_timestamp) {
-    std::stringstream stream;
-    stream << in_timestamp.year << "-" << in_timestamp.month << "-" << in_timestamp.day;
-    *out_sql = stream.str();
-
+    char timestamp_string[16];
+    sprintf(timestamp_string, "%d-%02d-%02d", in_timestamp.year, in_timestamp.month, in_timestamp.day);
+    *out_sql = timestamp_string;
     return MTR_STATUS_SUCCESS;
 }
